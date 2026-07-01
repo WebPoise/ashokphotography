@@ -47,26 +47,22 @@ API.interceptors.response.use(
 	},
 );
 
-export const getConnectionStatus = () => {
-	return {
-		isConnectionIssue: false,
-		useFallbackURL: false,
-		isOfflineMode: false,
-	};
-};
+export const getConnectionStatus = () => ({
+	isConnectionIssue: false,
+	useFallbackURL: false,
+	isOfflineMode: false,
+});
 
-export const diagnoseBrokenConnections = async () => {
-	return {
-		results: {
-			api: {
-				status: 'reachable',
-				error: null,
-			},
+export const diagnoseBrokenConnections = async () => ({
+	results: {
+		api: {
+			status: 'reachable',
+			error: null,
 		},
-		recommendations: [],
-		timestamp: new Date().toISOString(),
-	};
-};
+	},
+	recommendations: [],
+	timestamp: new Date().toISOString(),
+});
 
 export const fetchImagesWithCache = async () => {
 	const response = await API.get('/images');
