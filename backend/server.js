@@ -30,6 +30,7 @@ const allowedOrigins = [
 	'http://localhost:3000',
 	'http://localhost:3001',
 	'https://ashokphotography.vercel.app',
+	'https://ashokphotography-q2smqurm2-webpoises-projects.vercel.app',
 ];
 
 app.use(
