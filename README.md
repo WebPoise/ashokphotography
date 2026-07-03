@@ -6,9 +6,9 @@
 
 🌐 Website: https://www.webpoise.in
 
-📧 Email: webpoisemarketing@gmail.com
+📧 Email: contact@webpoise.in
 
-📱 Phone: +91 7975295996
+📱 Phone: +91 8495974456
 
 We specialize in:
 
