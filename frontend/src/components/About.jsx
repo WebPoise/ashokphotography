@@ -1,51 +1,117 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram, faFacebook } from '@fortawesome/free-brands-svg-icons';
+import {
+	faInstagram,
+	faFacebook,
+	faYoutube,
+} from '@fortawesome/free-brands-svg-icons';
+import { API } from '../api';
 
 const About = () => {
+	const [studio, setStudio] = useState(null);
+
+	useEffect(() => {
+		const fetchStudio = async () => {
+			try {
+				const response = await API.get('/studio');
+				setStudio(response.data.studio);
+			} catch (error) {
+				console.error('Error fetching studio:', error);
+			}
+		};
+
+		fetchStudio();
+	}, []);
+
 	return (
-		<section id="about" className="py-20 bg-gray-100 text-center">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<h2 className="text-4xl font-bold text-gray-800 mb-8">
-					About Me
-				</h2>
+		<section id="about" className="py-20 bg-gray-100">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12">
 
-				<p className="text-lg text-gray-600 max-w-4xl mx-auto">
-					I am a passionate professional photographer dedicated to
-					capturing life's most meaningful moments. Whether it's a
-					wedding, portrait session, maternity shoot, family event, or
-					special celebration, my goal is to create timeless images
-					that tell your unique story and preserve memories for years
-					to come.
-				</p>
+				{/* Profile Image */}
+				{studio?.profilePhotoUrl && (
+					<div className="w-full md:w-1/2">
+						<div className="w-full rounded-lg shadow-lg bg-white p-2">
+							<img
+								src={studio.profilePhotoUrl}
+								alt={
+									studio?.photographerName ||
+									studio?.studioName ||
+									'Photographer'
+								}
+								className="w-full h-auto rounded-lg"
+							/>
+						</div>
+					</div>
+				)}
 
-				<p className="text-lg text-gray-600 max-w-4xl mx-auto mt-6">
-					With a creative eye for detail and a commitment to quality,
-					I strive to deliver photographs that reflect genuine
-					emotions, beautiful moments, and unforgettable experiences.
-				</p>
+				{/* About Content */}
+				<div
+					className={
+						studio?.profilePhotoUrl
+							? 'w-full md:w-1/2 text-center md:text-left'
+							: 'w-full text-center'
+					}
+				>
+					<h2 className="text-4xl font-bold text-gray-800 mb-6">
+						{studio?.aboutTitle || 'About Us'}
+					</h2>
 
-				<div className="flex justify-center space-x-6 mt-8">
-					<a
-						href="https://www.instagram.com/mallikarjuna_gowds_mmg?igsh=YXphdWc0bnMxcnNi"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-gray-500 hover:text-pink-600"
-						aria-label="Instagram"
+					<p className="text-lg text-gray-600 whitespace-pre-line leading-relaxed">
+						{studio?.aboutDescription ||
+							'I am a passionate professional photographer dedicated to capturing life’s most meaningful moments.'}
+					</p>
+
+					<div
+						className={`flex space-x-6 mt-8 ${
+							studio?.profilePhotoUrl
+								? 'justify-center md:justify-start'
+								: 'justify-center'
+						}`}
 					>
-						<FontAwesomeIcon icon={faInstagram} size="2x" />
-					</a>
+						{studio?.instagram && (
+							<a
+								href={studio.instagram}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-gray-500 hover:text-pink-600"
+							>
+								<FontAwesomeIcon
+									icon={faInstagram}
+									size="2x"
+								/>
+							</a>
+						)}
 
-					<a
-						href="https://www.facebook.com/"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-gray-500 hover:text-blue-600"
-						aria-label="Facebook"
-					>
-						<FontAwesomeIcon icon={faFacebook} size="2x" />
-					</a>
+						{studio?.facebook && (
+							<a
+								href={studio.facebook}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-gray-500 hover:text-blue-600"
+							>
+								<FontAwesomeIcon
+									icon={faFacebook}
+									size="2x"
+								/>
+							</a>
+						)}
+
+						{studio?.youtube && (
+							<a
+								href={studio.youtube}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-gray-500 hover:text-red-600"
+							>
+								<FontAwesomeIcon
+									icon={faYoutube}
+									size="2x"
+								/>
+							</a>
+						)}
+					</div>
 				</div>
+
 			</div>
 		</section>
 	);

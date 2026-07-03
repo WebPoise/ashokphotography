@@ -14,7 +14,7 @@ const createSecondAdmin = async () => {
 	try {
 		// Check if user already exists
 		const existingUser = await User.findOne({
-			email: 'mallikarjunaphotography5@gmail.com',
+			email: 'ashokphotography688@gmail.com',
 		});
 		if (existingUser) {
 			console.log('User already exists');
@@ -22,9 +22,9 @@ const createSecondAdmin = async () => {
 		}
 
 		const newAdmin = new User({
-			name: 'Malli',
-			email: 'mallikarjunaphotography5@gmail.com',
-			password: 'Malli@1234',
+			name: 'Ashok',
+			email: 'ashokphotography688@gmail.com',
+			password: 'Ashok@1234',
 			isAdmin: true,
 		});
 

@@ -14,6 +14,12 @@ const LazyPricingManager = lazy(() =>
 	import('../components/PricingManager'),
 );
 
+const LazyStudioSettingsManager = lazy(() =>
+	import('../components/StudioSettingsManager'),
+);
+
+
+
 const Admin = () => {
 	const [bookings, setBookings] = useState([]);
 	const [view, setView] = useState(
@@ -235,6 +241,13 @@ const Admin = () => {
 					</Suspense>
 				);
 
+			case 'studio':
+	return (
+		<Suspense fallback={<LoadingSpinner />}>
+			<LazyStudioSettingsManager />
+		</Suspense>
+	);
+
 			default:
 				return null;
 		}
@@ -300,6 +313,14 @@ const Admin = () => {
 									Pricing Management
 								</button>
 
+
+								<button
+	onClick={() => changeView('studio')}
+	className="block w-full text-left px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg"
+>
+	Studio Settings
+</button>
+
 								<button
 									onClick={handleLogout}
 									className="block w-full text-left px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg"
@@ -312,15 +333,17 @@ const Admin = () => {
 
 					<main className="col-span-3 p-8 bg-gray-100">
 						<h2 className="text-4xl font-bold mb-6">
-							{view === 'bookings'
-								? 'Bookings'
-								: view === 'upload'
-								? 'Upload Images'
-								: view === 'manageGalleries'
-								? 'Manage Galleries'
-								: view === 'pricing'
-								? 'Pricing Management'
-								: 'Image List'}
+						{view === 'bookings'
+							? 'Bookings'
+							: view === 'upload'
+							? 'Upload Images'
+							: view === 'manageGalleries'
+							? 'Manage Galleries'
+							: view === 'pricing'
+							? 'Pricing Management'
+							: view === 'studio'
+							? 'Studio Settings'
+							: 'Image List'}
 						</h2>
 
 						{renderContent()}

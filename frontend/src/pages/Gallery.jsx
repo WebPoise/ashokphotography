@@ -12,38 +12,47 @@ const GalleryPage = () => {
 	const location = useLocation();
 
 	const fetchGalleryData = async () => {
-		try {
-			const response = await API.get('/images');
-			const data = response.data;
+	try {
+		const response = await API.get('/images?includeStudioAssets=false');
+		const data = response.data;
 
-			// Group images by category and remove any duplicate entries
-			const uniqueCategories = new Set(); // To track unique categories
-			const groupedData = data.reduce((acc, image) => {
-				const category = image.category || 'unknown';
-				if (!uniqueCategories.has(category)) {
-					uniqueCategories.add(category);
-					acc[category] = [];
-				}
-				acc[category].push(image);
-				return acc;
-			}, {});
+		const filteredData = data.filter(
+			(image) =>
+				!image.isStudioAsset &&
+				image.category !== 'studio-assets',
+		);
 
-			const formattedData = Object.keys(groupedData).map((category) => ({
-				id: category,
-				title: category.charAt(0).toUpperCase() + category.slice(1),
-				images: groupedData[category].sort(
-					(a, b) => (a.order ?? 0) - (b.order ?? 0),
-				),
-			}));
+		const uniqueCategories = new Set();
 
-			setGalleryData(formattedData);
-		} catch (error) {
-			console.error('Error fetching gallery data:', error);
-		} finally {
-			setLoading(false);
-		}
-	};
+		const groupedData = filteredData.reduce((acc, image) => {
+			const category = image.category || 'unknown';
 
+			if (category === 'studio-assets') return acc;
+
+			if (!uniqueCategories.has(category)) {
+				uniqueCategories.add(category);
+				acc[category] = [];
+			}
+
+			acc[category].push(image);
+			return acc;
+		}, {});
+
+		const formattedData = Object.keys(groupedData).map((category) => ({
+			id: category,
+			title: category.charAt(0).toUpperCase() + category.slice(1),
+			images: groupedData[category].sort(
+				(a, b) => (a.order ?? 0) - (b.order ?? 0),
+			),
+		}));
+
+		setGalleryData(formattedData);
+	} catch (error) {
+		console.error('Error fetching gallery data:', error);
+	} finally {
+		setLoading(false);
+	}
+};
 	useEffect(() => {
 		fetchGalleryData();
 	}, [location.pathname]);

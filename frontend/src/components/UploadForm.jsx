@@ -37,10 +37,11 @@ const UploadForm = () => {
 			console.log('Original Size:', image.size / 1024 / 1024, 'MB');
 
 			const compressedImage = await imageCompression(image, {
-				maxSizeMB: 1,
-				maxWidthOrHeight: 1600,
-				useWebWorker: true,
-			});
+	maxSizeMB: 4,
+	maxWidthOrHeight: 3000,
+	initialQuality: 0.95,
+	useWebWorker: true,
+});
 
 			console.log(
 				'Compressed Size:',

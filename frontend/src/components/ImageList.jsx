@@ -12,7 +12,7 @@ const ImageList = () => {
 
 	const fetchImages = async () => {
 		try {
-			const response = await API.get('/images');
+			const response = await API.get('/images?includeStudioAssets=true');
 			setImages(response.data);
 			setLoading(false);
 		} catch (error) {
@@ -34,6 +34,12 @@ const ImageList = () => {
 
 	if (loading) return <LoadingSpinner />;
 
+	const sortedImages = [...images].sort((a, b) => {
+		if (a.isStudioAsset && !b.isStudioAsset) return -1;
+		if (!a.isStudioAsset && b.isStudioAsset) return 1;
+		return 0;
+	});
+
 	return (
 		<div className="bg-white rounded-lg shadow overflow-hidden">
 			<table className="min-w-full divide-y divide-gray-200">
@@ -53,8 +59,9 @@ const ImageList = () => {
 						</th>
 					</tr>
 				</thead>
+
 				<tbody className="bg-white divide-y divide-gray-200">
-					{images.map((image) => (
+					{sortedImages.map((image) => (
 						<tr key={image.id} className="hover:bg-gray-50">
 							<td className="px-6 py-4 whitespace-nowrap">
 								<img
@@ -66,14 +73,25 @@ const ImageList = () => {
 									}}
 								/>
 							</td>
+
 							<td className="px-6 py-4 whitespace-nowrap">
-								<span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-									{image.category}
+								<span
+									className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+										image.isStudioAsset
+											? 'bg-pink-100 text-pink-800'
+											: 'bg-gray-100 text-gray-800'
+									}`}
+								>
+									{image.isStudioAsset
+										? `Studio ${image.studioAssetType}`
+										: image.category}
 								</span>
 							</td>
+
 							<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
 								{image.order || 'N/A'}
 							</td>
+
 							<td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
 								<button
 									onClick={() => handleDelete(image.id)}

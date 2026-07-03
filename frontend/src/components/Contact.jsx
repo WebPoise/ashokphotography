@@ -1,35 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { API } from '../api';
 
 const Contact = () => {
+	const [studio, setStudio] = useState(null);
 	const [formData, setFormData] = useState({
 		name: '',
-		email: '',
+		phone: '',
 		message: '',
 	});
 
 	const [successMessage, setSuccessMessage] = useState('');
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
+	useEffect(() => {
+		API.get('/studio')
+			.then((res) => setStudio(res.data.studio))
+			.catch((err) => console.error('Studio fetch error:', err));
+	}, []);
 
+	const handleChange = (e) => {
 		setFormData({
 			...formData,
-			[name]: value,
+			[e.target.name]: e.target.value,
 		});
 	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		setSuccessMessage(
-			'Thank you for contacting us. Please contact us by phone or email.',
-		);
+		const whatsappNumber =
+			studio?.whatsapp?.replace(/\D/g, '') ||
+			studio?.phone?.replace(/\D/g, '');
 
-		setFormData({
-			name: '',
-			email: '',
-			message: '',
-		});
+		if (whatsappNumber) {
+			const whatsappMessage = `Hello, my name is ${formData.name}. Phone: ${formData.phone}. Message: ${formData.message}`;
+			window.open(
+				`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+					whatsappMessage,
+				)}`,
+				'_blank',
+			);
+			setSuccessMessage('Thank you! WhatsApp chat has been opened.');
+		} else {
+			setSuccessMessage(
+				'Thank you for contacting us. Please contact us by phone or email.',
+			);
+		}
+
+		setFormData({ name: '', phone: '', message: '' });
 	};
 
 	return (
@@ -40,48 +57,43 @@ const Contact = () => {
 				</h2>
 
 				<p className="text-lg text-gray-600 mb-4">
-					Have any questions? Feel free to contact us.
+					Have any questions? Feel free to contact{' '}
+					{studio?.studioName || 'us'}.
 				</p>
 
 				<form onSubmit={handleSubmit} className="max-w-lg mx-auto">
-					<div className="mb-4">
-						<input
-							type="text"
-							name="name"
-							placeholder="Your Name"
-							value={formData.name}
-							onChange={handleChange}
-							required
-							className="w-full p-4 border border-gray-300 rounded-lg"
-						/>
-					</div>
+					<input
+						type="text"
+						name="name"
+						placeholder="Your Name"
+						value={formData.name}
+						onChange={handleChange}
+						required
+						className="w-full p-4 border border-gray-300 rounded-lg mb-4"
+					/>
 
-					<div className="mb-4">
-						<input
-							type="email"
-							name="email"
-							placeholder="Your Email"
-							value={formData.email}
-							onChange={handleChange}
-							required
-							className="w-full p-4 border border-gray-300 rounded-lg"
-						/>
-					</div>
+					<input
+						type="tel"
+						name="phone"
+						placeholder="Your Phone"
+						value={formData.phone}
+						onChange={handleChange}
+						required
+						className="w-full p-4 border border-gray-300 rounded-lg mb-4"
+					/>
 
-					<div className="mb-4">
-						<textarea
-							name="message"
-							placeholder="Your Message"
-							value={formData.message}
-							onChange={handleChange}
-							required
-							className="w-full p-4 border border-gray-300 rounded-lg"
-							rows="5"
-						/>
-					</div>
+					<textarea
+						name="message"
+						placeholder="Your Message"
+						value={formData.message}
+						onChange={handleChange}
+						required
+						className="w-full p-4 border border-gray-300 rounded-lg mb-4"
+						rows="5"
+					/>
 
 					<button className="px-6 py-3 bg-lollipop text-white font-semibold rounded-lg">
-						Send Message
+						Send on WhatsApp
 					</button>
 				</form>
 

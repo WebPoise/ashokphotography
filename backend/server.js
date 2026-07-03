@@ -17,6 +17,8 @@ import pricingRoutes from './routes/pricingRoutes.js';
 
 import imageOptimization from './middleware/imageOptimization.js';
 
+import studioRoutes from './routes/studioRoutes.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -26,8 +28,7 @@ const app = express();
 
 const allowedOrigins = [
 	'http://localhost:3000',
-	'https://mallikarjunaphotography.vercel.app',
-	'https://mallikarjunaphotography.webpoise.in',
+	'http://localhost:3001',
 ];
 
 app.use(
@@ -82,11 +83,12 @@ app.use('/users', userRoutes);
 app.use('/bookings', bookingRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/pricing', pricingRoutes);
+app.use('/studio', studioRoutes);
 
 app.get('/image-optimize', imageOptimization.optimizeImage);
 
 app.get('/', (req, res) => {
-	res.json({ message: 'Mallikarjuna Photography API is running' });
+	res.json({ message: 'Ashok Photography API is running' });
 });
 
 app.get('/debug', (req, res) => {

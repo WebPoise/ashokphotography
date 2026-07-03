@@ -1,9 +1,9 @@
 import axios from 'axios';
+
 console.log("NEW API FILE LOADED - 120 sec timeout");
 
 const API_URL =
-	process.env.REACT_APP_API_URL ||
-	'https://mallikarjunaphotography-backend.onrender.com';
+	process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export const API = axios.create({
 	baseURL: API_URL,

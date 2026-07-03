@@ -19,6 +19,16 @@ const imageSchema = mongoose.Schema(
 		},
 		tags: [String],
 		order: { type: Number, default: 0 },
+
+		isStudioAsset: {
+			type: Boolean,
+			default: false,
+		},
+		studioAssetType: {
+			type: String,
+			enum: ['logo', 'hero', 'profile', 'none'],
+			default: 'none',
+		},
 	},
 	{
 		timestamps: true,
