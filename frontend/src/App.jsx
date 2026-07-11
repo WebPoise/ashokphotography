@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { checkWebPSupport } from './api';
+import ScrollToTop from "./components/ScrollToTop";
 
 // Import components directly for now to debug
 import Layout from './components/Layout';
@@ -29,6 +30,7 @@ function App() {
 
 	return (
 		<div className="App">
+			<ScrollToTop />
 			<Layout>
 				<Routes>
 					<Route path="/" element={<Home />} />
