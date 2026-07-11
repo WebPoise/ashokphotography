@@ -5,7 +5,7 @@ import imageCompression from 'browser-image-compression';
 const categories = [
 	{ id: 'weddings', name: 'Weddings' },
 	{ id: 'portraits', name: 'Portraits' },
-	{ id: 'animals', name: 'Animals' },
+	{ id: 'bridal shoot', name: 'Bridal Shoot' },
 	{ id: 'art', name: 'Fine Art' },
 	{ id: 'pregnant', name: 'Pregnant' },
 	{ id: 'newborn', name: 'Newborn' },
