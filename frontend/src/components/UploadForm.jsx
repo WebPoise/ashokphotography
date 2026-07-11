@@ -7,7 +7,7 @@ const categories = [
 	{ id: 'portraits', name: 'Portraits' },
 	{ id: 'bridal shoot', name: 'Bridal Shoot' },
 	{ id: 'art', name: 'Fine Art' },
-	{ id: 'pregnant', name: 'Pregnant' },
+	{ id: 'maternity', name: 'Maternity' },
 	{ id: 'newborn', name: 'Newborn' },
 	{ id: 'housing', name: 'Housing' },
 	{ id: 'nature', name: 'Nature' },
