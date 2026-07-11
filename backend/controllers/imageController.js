@@ -24,17 +24,20 @@ const getCloudinaryPublicId = (url) => {
 
 export const getImages = async (req, res) => {
 	try {
-		const category = req.query.category;
-		const includeStudioAssets = req.query.includeStudioAssets === 'true';
+		const { category, includeStudioAssets } = req.query;
 
 		let filter = {};
 
-		if (category) {
-			filter.category = category;
+		// Hide studio assets unless explicitly requested
+		if (includeStudioAssets !== 'true') {
+			filter.isStudioAsset = { $ne: true };
 		}
 
-		if (!includeStudioAssets) {
-			filter.isStudioAsset = { $ne: true };
+		// If a category is requested, return ONLY that category
+		if (category) {
+			filter.category = category;
+		} else if (includeStudioAssets !== 'true') {
+			// Otherwise exclude the studio-assets category
 			filter.category = { $ne: 'studio-assets' };
 		}
 
@@ -168,14 +171,9 @@ export const deleteImage = async (req, res) => {
 				? 'video'
 				: 'image';
 
-			const cloudinaryResult = await cloudinary.uploader.destroy(
-				publicId,
-				{
-					resource_type: resourceType,
-				},
-			);
-
-			console.log('Cloudinary delete result:', cloudinaryResult);
+			await cloudinary.uploader.destroy(publicId, {
+				resource_type: resourceType,
+			});
 		}
 
 		if (image.isStudioAsset) {
@@ -213,7 +211,9 @@ export const deleteImage = async (req, res) => {
 
 		await Image.findByIdAndDelete(id);
 
-		res.status(200).json({ message: 'Media deleted successfully' });
+		res.status(200).json({
+			message: 'Media deleted successfully',
+		});
 	} catch (error) {
 		console.error('Error deleting media:', error);
 		res.status(500).json({
